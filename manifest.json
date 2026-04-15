@@ -1,0 +1,18 @@
+{
+  "name": "Poker Log 手牌記錄本",
+  "short_name": "Poker Log",
+  "description": "撲克手牌記錄 App，離線可用",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07120a",
+  "theme_color": "#0a1a0f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
