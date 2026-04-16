@@ -18,6 +18,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 header{background:linear-gradient(180deg,#0d2a18,#091509);border-bottom:1px solid rgba(200,185,122,.2);padding-top:env(safe-area-inset-top,0);flex-shrink:0}
 .header-inner{padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-size:20px;letter-spacing:3px;color:var(--gold);font-variant:small-caps}
+.api-dot{font-size:11px;font-family:sans-serif;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid rgba(200,185,122,.2)}
+.api-dot.set{color:var(--green);border-color:rgba(76,175,80,.3)}
+.api-dot.unset{color:#888;border-color:#333}
 .stats-bar{display:flex;justify-content:space-around;padding:8px 0 12px;border-top:1px solid rgba(200,185,122,.1)}
 .stat{text-align:center}.stat-val{font-size:18px;font-weight:bold;line-height:1}
 .stat-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;font-family:sans-serif}
@@ -28,31 +31,31 @@ header{background:linear-gradient(180deg,#0d2a18,#091509);border-bottom:1px soli
 .panel.hidden{display:none}
 .sec-label{font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;font-family:sans-serif}
 
-/* Camera section */
-.camera-bar{display:flex;gap:8px;margin-bottom:16px}
-.cam-btn{flex:1;padding:12px 8px;border-radius:10px;border:1px dashed rgba(200,185,122,.4);background:rgba(200,185,122,.06);color:var(--gold);font-size:12px;font-family:sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;-webkit-user-select:none}
-.cam-btn .cam-icon{font-size:22px}
+/* Camera */
+.camera-bar{display:flex;gap:8px;margin-bottom:12px}
+.cam-btn{flex:1;padding:13px 6px;border-radius:10px;border:1px dashed rgba(200,185,122,.35);background:rgba(200,185,122,.05);color:var(--gold);font-size:12px;font-family:sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;-webkit-user-select:none;transition:all .15s}
 .cam-btn:active{background:rgba(200,185,122,.12)}
-.cam-btn.loading{opacity:.6;pointer-events:none}
-.ai-status{font-size:11px;font-family:sans-serif;padding:8px 12px;border-radius:8px;margin-bottom:12px;text-align:center;display:none}
-.ai-status.thinking{display:block;background:rgba(200,185,122,.08);color:var(--gold);border:1px solid rgba(200,185,122,.2)}
-.ai-status.success{display:block;background:rgba(76,175,80,.1);color:var(--green);border:1px solid rgba(76,175,80,.2)}
-.ai-status.error{display:block;background:rgba(224,82,82,.1);color:var(--red);border:1px solid rgba(224,82,82,.2)}
+.cam-btn .ci{font-size:22px}
+.cam-btn.loading{opacity:.5;pointer-events:none}
+.ai-status{font-size:12px;font-family:sans-serif;padding:10px 14px;border-radius:9px;margin-bottom:12px;text-align:center;display:none;line-height:1.5}
+.ai-status.thinking{display:block;background:rgba(200,185,122,.07);color:var(--gold);border:1px solid rgba(200,185,122,.2)}
+.ai-status.success{display:block;background:rgba(76,175,80,.08);color:var(--green);border:1px solid rgba(76,175,80,.2)}
+.ai-status.error{display:block;background:rgba(224,82,82,.08);color:var(--red);border:1px solid rgba(224,82,82,.2)}
+
+/* Cards */
+.card-row{display:flex;justify-content:center;gap:18px;margin-bottom:18px;padding:10px 0}
+.card-btn{width:64px;height:88px;border-radius:10px;border:2px dashed rgba(200,185,122,.35);background:rgba(255,255,255,.04);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;-webkit-user-select:none}
+.card-btn.filled{background:var(--card-bg);border:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.card-btn .rank{font-size:22px;line-height:1}.card-btn .suit{font-size:24px;line-height:1}.card-btn .plus{font-size:30px;color:rgba(200,185,122,.4)}
 
 /* Community cards */
-.community-row{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
-.comm-card{width:40px;height:56px;border-radius:6px;border:1px dashed rgba(200,185,122,.25);background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;cursor:pointer;-webkit-user-select:none}
-.comm-card.filled{background:var(--card-bg);border:1px solid rgba(200,185,122,.5);box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.comm-card .cr{font-size:14px;line-height:1}.comm-card .cs{font-size:16px;line-height:1}
-.comm-card .cp{font-size:16px;color:rgba(200,185,122,.25)}
-.comm-label{font-size:9px;color:#555;letter-spacing:1px;font-family:sans-serif;text-align:center;margin-bottom:6px}
-
-/* Hole cards */
-.card-row{display:flex;justify-content:center;gap:18px;margin-bottom:20px;padding:12px 0}
-.card-btn{width:64px;height:88px;border-radius:10px;border:2px dashed rgba(200,185,122,.35);background:rgba(255,255,255,.04);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;-webkit-user-select:none;user-select:none}
-.card-btn.filled{background:var(--card-bg);border:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.5)}
-.card-btn .rank{font-size:22px;line-height:1}.card-btn .suit{font-size:24px;line-height:1}
-.card-btn .plus{font-size:30px;color:rgba(200,185,122,.4)}
+.comm-section{margin-bottom:18px}
+.comm-row{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap}
+.comm-card{width:42px;height:58px;border-radius:7px;border:1px dashed rgba(200,185,122,.22);background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;cursor:pointer;-webkit-user-select:none}
+.comm-card.filled{background:var(--card-bg);border:1px solid rgba(200,185,122,.4);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.comm-card .cr{font-size:14px;line-height:1}.comm-card .cs{font-size:15px;line-height:1}.comm-card .cp{font-size:18px;color:rgba(200,185,122,.22)}
+.comm-divider{width:1px;background:rgba(255,255,255,.08);margin:0 2px;align-self:stretch}
+.comm-sublabel{font-size:9px;color:#444;text-align:center;margin-top:4px;font-family:sans-serif;letter-spacing:1px}
 
 /* Picker */
 .picker-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:100;display:flex;flex-direction:column;justify-content:flex-end}
@@ -86,9 +89,7 @@ textarea{resize:none;line-height:1.5}
 .mini-card{width:36px;height:50px;background:var(--card-bg);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.5);flex-shrink:0}
 .mini-card .r{font-size:13px;line-height:1;font-family:'Georgia',serif;font-weight:bold}
 .mini-card .s{font-size:15px;line-height:1;font-family:'Georgia',serif}
-.mini-card.empty{background:rgba(255,255,255,.04);border:1px dashed #333}
-.mini-card.sm{width:26px;height:36px}
-.mini-card.sm .r{font-size:10px}.mini-card.sm .s{font-size:11px}
+.mini-card.sm{width:26px;height:36px}.mini-card.sm .r{font-size:10px}.mini-card.sm .s{font-size:11px}
 .hand-meta{flex:1;min-width:0}
 .tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px}
 .tag{font-size:10px;padding:3px 8px;border-radius:20px;font-family:sans-serif}
@@ -99,9 +100,9 @@ textarea{resize:none;line-height:1.5}
 .tag.even{background:rgba(200,185,122,.1);color:var(--gold)}
 .tag.fold{background:rgba(128,128,128,.1);color:#777}
 .tag.pot{color:#666}
-.comm-cards-row{display:flex;gap:3px;margin-top:4px}
-.hand-note{font-size:11px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:sans-serif;margin-top:3px}
-.hand-time{font-size:10px;color:#444;font-family:sans-serif;margin-top:2px}
+.comm-cards-row{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap}
+.hand-note{font-size:11px;color:#666;overflow:hidden;text-overflow:ellipsis;font-family:sans-serif;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hand-time{font-size:10px;color:#444;font-family:sans-serif;margin-top:3px}
 .del-btn{background:none;border:none;color:#444;cursor:pointer;font-size:22px;padding:4px 8px;flex-shrink:0;line-height:1}
 .empty{text-align:center;padding:50px 20px;color:#444}
 .empty .icon{font-size:48px;margin-bottom:12px}
@@ -109,23 +110,19 @@ textarea{resize:none;line-height:1.5}
 .hist-top{display:flex;justify-content:flex-end;margin-bottom:10px}
 .clear-all{font-size:11px;color:var(--red);background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.3);border-radius:6px;padding:6px 12px;cursor:pointer;font-family:sans-serif}
 
-/* API Key modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.hidden{display:none}
 .modal-box{background:#141414;border:1px solid rgba(200,185,122,.25);border-radius:16px;padding:24px 20px;width:100%;max-width:380px}
-.modal-title{font-size:16px;color:var(--gold);margin-bottom:8px;letter-spacing:1px}
-.modal-desc{font-size:12px;color:#888;font-family:sans-serif;line-height:1.7;margin-bottom:16px}
-.modal-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(200,185,122,.3);border-radius:8px;padding:12px;color:var(--text);font-size:13px;font-family:monospace;outline:none;margin-bottom:12px}
-.modal-btn{width:100%;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:bold;cursor:pointer;font-family:sans-serif;margin-bottom:8px}
+.modal-title{font-size:17px;color:var(--gold);margin-bottom:10px;letter-spacing:1px}
+.modal-desc{font-size:12px;color:#888;font-family:sans-serif;line-height:1.8;margin-bottom:16px}
+.modal-desc a{color:var(--gold);text-decoration:none}
+.modal-step{background:rgba(200,185,122,.06);border:1px solid rgba(200,185,122,.15);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;font-family:sans-serif;color:#aaa;line-height:1.7}
+.modal-step b{color:var(--gold)}
+.modal-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(200,185,122,.3);border-radius:8px;padding:12px;color:var(--text);font-size:13px;font-family:monospace;outline:none;margin-bottom:12px;-webkit-user-select:auto}
+.modal-btn{width:100%;padding:14px;border-radius:10px;border:none;font-size:14px;font-weight:bold;cursor:pointer;font-family:sans-serif;margin-bottom:8px}
 .modal-btn.primary{background:linear-gradient(135deg,#c8b97a,#a89458);color:#080e08}
 .modal-btn.secondary{background:rgba(255,255,255,.06);border:1px solid #333;color:#888}
-.api-key-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.api-status{font-size:11px;font-family:sans-serif}
-.api-status.set{color:var(--green)}
-.api-status.unset{color:#666}
-.change-key-btn{font-size:11px;color:var(--gold);background:none;border:1px solid rgba(200,185,122,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:sans-serif}
-
-/* Hidden file input */
 #cam-input{display:none}
 </style>
 </head>
@@ -134,9 +131,7 @@ textarea{resize:none;line-height:1.5}
   <header>
     <div class="header-inner">
       <div class="logo">♠ Poker Log ♣</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="api-status unset" id="api-status-dot">🔑 未設定</div>
-      </div>
+      <button class="api-dot unset" id="api-dot" onclick="showApiModal()">🔑 設定 API</button>
     </div>
     <div class="stats-bar">
       <div class="stat"><div class="stat-val" id="s-total">0</div><div class="stat-lbl">總記錄</div></div>
@@ -149,45 +144,42 @@ textarea{resize:none;line-height:1.5}
     <button class="tab active" onclick="switchTab('record')">📝 記錄手牌</button>
     <button class="tab" onclick="switchTab('history')" id="hist-tab">📖 歷史記錄</button>
   </div>
-  <div class="panel" id="panel-record">
 
-    <!-- AI Camera buttons -->
-    <div class="sec-label">AI 拍照辨識</div>
+  <div class="panel" id="panel-record">
+    <div class="sec-label">AI 拍照辨識（Google Gemini · 免費）</div>
     <div class="camera-bar">
       <button class="cam-btn" id="cam-hole-btn" onclick="triggerCamera('hole')">
-        <span class="cam-icon">📷</span>
-        <span>拍手牌</span>
+        <span class="ci">📷</span><span>拍手牌</span>
       </button>
       <button class="cam-btn" id="cam-all-btn" onclick="triggerCamera('all')">
-        <span class="cam-icon">🃏</span>
-        <span>拍手牌+公共牌</span>
-      </button>
-      <button class="cam-btn" onclick="showApiModal()">
-        <span class="cam-icon">🔑</span>
-        <span>API 設定</span>
+        <span class="ci">🃏</span><span>拍全部牌面</span>
       </button>
     </div>
     <div class="ai-status" id="ai-status"></div>
     <input type="file" id="cam-input" accept="image/*" capture="environment">
 
-    <!-- Hole cards -->
     <div class="sec-label">手牌（點擊手動選牌）</div>
     <div class="card-row">
       <button class="card-btn" id="card1-btn" onclick="openPicker('h1')"><span class="plus">+</span></button>
       <button class="card-btn" id="card2-btn" onclick="openPicker('h2')"><span class="plus">+</span></button>
     </div>
 
-    <!-- Community cards -->
-    <div class="sec-label">公共牌（選填）</div>
-    <div class="comm-label">翻牌</div>
-    <div class="community-row" id="comm-row">
-      <button class="comm-card" id="cc1" onclick="openPicker('c1')"><span class="cp">+</span></button>
-      <button class="comm-card" id="cc2" onclick="openPicker('c2')"><span class="cp">+</span></button>
-      <button class="comm-card" id="cc3" onclick="openPicker('c3')"><span class="cp">+</span></button>
-      <div style="width:1px;background:rgba(255,255,255,.1);margin:0 4px"></div>
-      <button class="comm-card" id="cc4" onclick="openPicker('c4')"><span class="cp">+</span></button>
-      <div style="width:1px;background:rgba(255,255,255,.1);margin:0 4px"></div>
-      <button class="comm-card" id="cc5" onclick="openPicker('c5')"><span class="cp">+</span></button>
+    <div class="comm-section">
+      <div class="sec-label">公共牌（選填）</div>
+      <div class="comm-row">
+        <button class="comm-card" id="cc1" onclick="openPicker('c1')"><span class="cp">+</span></button>
+        <button class="comm-card" id="cc2" onclick="openPicker('c2')"><span class="cp">+</span></button>
+        <button class="comm-card" id="cc3" onclick="openPicker('c3')"><span class="cp">+</span></button>
+        <div class="comm-divider"></div>
+        <button class="comm-card" id="cc4" onclick="openPicker('c4')"><span class="cp">+</span></button>
+        <div class="comm-divider"></div>
+        <button class="comm-card" id="cc5" onclick="openPicker('c5')"><span class="cp">+</span></button>
+      </div>
+      <div style="display:flex;justify-content:space-around;margin-top:4px">
+        <span class="comm-sublabel" style="flex:3">翻牌</span>
+        <span class="comm-sublabel" style="flex:1">轉牌</span>
+        <span class="comm-sublabel" style="flex:1">河牌</span>
+      </div>
     </div>
 
     <div class="sec-label">位置</div>
@@ -218,21 +210,22 @@ textarea{resize:none;line-height:1.5}
     <div class="sec-label">鍋底 (BB)</div>
     <input type="number" id="pot-input" placeholder="e.g. 12" inputmode="decimal">
     <div class="sec-label">備註</div>
-    <textarea id="note-input" rows="2" placeholder="心得、思路…"></textarea>
+    <textarea id="note-input" rows="2" placeholder="心得、公共牌、對手行為…"></textarea>
     <button class="save-btn disabled" id="save-btn" onclick="saveHand()">選牌後儲存</button>
   </div>
+
   <div class="panel hidden" id="panel-history">
     <div id="history-list"></div>
   </div>
 </div>
 
-<!-- Card Picker -->
+<!-- Picker -->
 <div class="picker-overlay hidden" id="picker-overlay">
   <div class="picker-sheet">
-    <div class="picker-header"><div class="picker-title" id="picker-title">選擇牌</div></div>
+    <div class="picker-header"><div class="picker-title" id="picker-title">選牌</div></div>
     <div class="picker-scroll" id="picker-suits"></div>
     <div class="picker-footer">
-      <button class="clear-btn" id="picker-clear" onclick="clearCard()">清除選牌</button>
+      <button class="clear-btn" id="picker-clear" onclick="clearCard()">清除</button>
       <button class="cancel-btn" onclick="closePicker()">取消</button>
     </div>
   </div>
@@ -241,13 +234,16 @@ textarea{resize:none;line-height:1.5}
 <!-- API Key Modal -->
 <div class="modal-overlay hidden" id="api-modal">
   <div class="modal-box">
-    <div class="modal-title">🔑 設定 API 金鑰</div>
-    <div class="modal-desc">
-      請輸入你的 Anthropic API 金鑰，用於 AI 拍照辨識牌面。<br>
-      金鑰只儲存在你的手機本地，不會上傳到任何地方。<br><br>
-      申請網址：<span style="color:var(--gold)">console.anthropic.com</span>
+    <div class="modal-title">🔑 設定 Google Gemini API 金鑰</div>
+    <div class="modal-desc">免費申請步驟：</div>
+    <div class="modal-step">
+      1. 前往 <b>aistudio.google.com</b><br>
+      2. 登入你的 Google 帳號<br>
+      3. 點左側 <b>「Get API key」</b><br>
+      4. 點 <b>「Create API key」</b><br>
+      5. 複製金鑰貼到下方
     </div>
-    <input class="modal-input" id="api-key-input" type="password" placeholder="sk-ant-...">
+    <input class="modal-input" id="api-key-input" type="password" placeholder="AIza...">
     <button class="modal-btn primary" onclick="saveApiKey()">儲存金鑰</button>
     <button class="modal-btn secondary" onclick="hideApiModal()">取消</button>
   </div>
@@ -255,100 +251,96 @@ textarea{resize:none;line-height:1.5}
 
 <script>
 const SUITS=['♠','♥','♦','♣'],RANKS=['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
-// slot: h1, h2, c1~c5
 let state={h1:null,h2:null,c1:null,c2:null,c3:null,c4:null,c5:null,pos:'',act:'',res:''};
 let hands=[],pickerSlot='',currentTab='record',cameraMode='hole';
 try{hands=JSON.parse(localStorage.getItem('pokerHands')||'[]');}catch{}
 
-document.getElementById('picker-overlay').addEventListener('click',function(e){if(e.target===this)closePicker();});
-document.getElementById('api-modal').addEventListener('click',function(e){if(e.target===this)hideApiModal();});
+document.getElementById('picker-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('picker-overlay'))closePicker();});
+document.getElementById('api-modal').addEventListener('click',e=>{if(e.target===document.getElementById('api-modal'))hideApiModal();});
+document.getElementById('cam-input').addEventListener('change',function(){if(this.files&&this.files[0])processImage(this.files[0]);});
 
-// Camera
-document.getElementById('cam-input').addEventListener('change',function(){
-  if(this.files&&this.files[0])processImage(this.files[0]);
-});
-
+// ---- CAMERA / AI ----
 function triggerCamera(mode){
-  if(!localStorage.getItem('anthropicKey')){showApiModal();return;}
+  if(!localStorage.getItem('geminiKey')){showApiModal();return;}
   cameraMode=mode;
+  document.getElementById('cam-input').value='';
   document.getElementById('cam-input').click();
 }
 
 async function processImage(file){
   const status=document.getElementById('ai-status');
-  const btn1=document.getElementById('cam-hole-btn'),btn2=document.getElementById('cam-all-btn');
+  const b1=document.getElementById('cam-hole-btn'),b2=document.getElementById('cam-all-btn');
   status.className='ai-status thinking';
-  status.textContent='🤖 AI 正在辨識牌面…';
-  btn1.classList.add('loading');btn2.classList.add('loading');
+  status.textContent='🤖 AI 辨識中，請稍候…';
+  b1.classList.add('loading');b2.classList.add('loading');
 
   try{
     const b64=await toBase64(file);
+    const mimeType=file.type||'image/jpeg';
     const prompt=cameraMode==='hole'
-      ?'請辨識圖片中的撲克牌手牌（hole cards）。只回傳JSON格式，例如：{"h1":"As","h2":"Kh"}。花色用s(黑桃)h(紅心)d(方塊)c(梅花)，點數用A K Q J T 9-2。只回傳JSON不要其他文字。'
-      :'請辨識圖片中所有撲克牌。手牌(hole cards)放h1,h2；公共牌(board)放c1~c5（沒有就省略）。只回傳JSON格式，例如：{"h1":"As","h2":"Kh","c1":"Qd","c2":"Jc","c3":"9s"}。花色用s(黑桃)h(紅心)d(方塊)c(梅花)，點數用A K Q J T 9-2。只回傳JSON不要其他文字。';
+      ?'辨識圖片中的撲克手牌(hole cards)，只回傳純JSON，格式：{"h1":"As","h2":"Kh"}。花色：s=黑桃,h=紅心,d=方塊,c=梅花。點數：A K Q J T 9~2。只輸出JSON。'
+      :'辨識圖片中所有撲克牌。手牌放h1,h2；公共牌放c1~c5(沒有就省略)。只回傳純JSON，格式範例：{"h1":"As","h2":"Kh","c1":"Qd","c2":"Jc","c3":"9s"}。花色：s=黑桃,h=紅心,d=方塊,c=梅花。點數：A K Q J T 9~2。只輸出JSON。';
 
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const key=localStorage.getItem('geminiKey');
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':localStorage.getItem('anthropicKey'),'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-opus-4-5-20251101',max_tokens:200,messages:[{role:'user',content:[
-        {type:'image',source:{type:'base64',media_type:file.type,data:b64}},
-        {type:'text',text:prompt}
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[
+        {inline_data:{mime_type:mimeType,data:b64}},
+        {text:prompt}
       ]}]})
     });
 
     if(!res.ok){
       const err=await res.json();
-      throw new Error(err.error?.message||'API 錯誤');
+      throw new Error(err.error?.message||`HTTP ${res.status}`);
     }
     const data=await res.json();
-    const text=data.content[0].text.trim();
-    const json=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const json=JSON.parse(clean);
 
     let filled=[];
-    const slotMap={h1:'♠♥♦♣',h2:'',c1:'',c2:'',c3:'',c4:'',c5:''};
     Object.entries(json).forEach(([slot,val])=>{
       const converted=convertCard(val);
       if(converted&&state.hasOwnProperty(slot)){
-        state[slot]=converted;
-        renderSlot(slot,converted);
-        filled.push(slot);
+        state[slot]=converted;renderSlot(slot,converted);filled.push(slot);
       }
     });
-
     updateSaveBtn();
-    status.className='ai-status success';
-    status.textContent=`✓ 辨識完成！識別到 ${filled.length} 張牌：${filled.map(s=>state[s]).join(' ')}`;
+    if(filled.length){
+      status.className='ai-status success';
+      status.textContent=`✓ 辨識完成！${filled.length} 張牌：${filled.map(s=>state[s]).join(' ')}`;
+    }else{
+      status.className='ai-status error';
+      status.textContent='辨識不到牌面，請重拍（確保光線充足、牌面清晰）';
+    }
   }catch(e){
+    console.error(e);
     status.className='ai-status error';
-    status.textContent='✗ 辨識失敗：'+(e.message||'請重試');
+    if(e.message&&e.message.includes('API_KEY')){
+      status.textContent='✗ API 金鑰無效，請重新設定';
+    }else{
+      status.textContent='✗ 辨識失敗：'+(e.message||'請重試');
+    }
   }finally{
-    btn1.classList.remove('loading');btn2.classList.remove('loading');
+    b1.classList.remove('loading');b2.classList.remove('loading');
     document.getElementById('cam-input').value='';
   }
 }
 
 function convertCard(str){
-  // Convert "As","Kh","Qd","Jc","Ts" etc to "A♠" format
   if(!str||str.length<2)return null;
-  const rankMap={A:'A',K:'K',Q:'Q',J:'J',T:'T','10':'T',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9'};
-  const suitMap={s:'♠',h:'♥',d:'♦',c:'♣',S:'♠',H:'♥',D:'♦',C:'♣'};
-  const rank=rankMap[str.slice(0,-1)];
-  const suit=suitMap[str.slice(-1)];
-  return (rank&&suit)?rank+suit:null;
+  const rm={A:'A',K:'K',Q:'Q',J:'J',T:'T','10':'T',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9'};
+  const sm={s:'♠',h:'♥',d:'♦',c:'♣',S:'♠',H:'♥',D:'♦',C:'♣'};
+  const r=rm[str.slice(0,-1)],s=sm[str.slice(-1)];
+  return (r&&s)?r+s:null;
 }
+function toBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
 
-function toBase64(file){
-  return new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=()=>res(r.result.split(',')[1]);
-    r.onerror=rej;
-    r.readAsDataURL(file);
-  });
-}
-
-// API Key
+// ---- API KEY ----
 function showApiModal(){
-  const k=localStorage.getItem('anthropicKey');
+  const k=localStorage.getItem('geminiKey');
   if(k)document.getElementById('api-key-input').value=k;
   document.getElementById('api-modal').classList.remove('hidden');
 }
@@ -356,63 +348,53 @@ function hideApiModal(){document.getElementById('api-modal').classList.add('hidd
 function saveApiKey(){
   const k=document.getElementById('api-key-input').value.trim();
   if(!k)return;
-  localStorage.setItem('anthropicKey',k);
-  updateApiStatus();
-  hideApiModal();
+  localStorage.setItem('geminiKey',k);
+  updateApiDot();hideApiModal();
 }
-function updateApiStatus(){
-  const el=document.getElementById('api-status-dot');
-  if(localStorage.getItem('anthropicKey')){el.textContent='🔑 已設定';el.className='api-status set';}
-  else{el.textContent='🔑 未設定';el.className='api-status unset';}
+function updateApiDot(){
+  const el=document.getElementById('api-dot');
+  if(localStorage.getItem('geminiKey')){el.textContent='✓ API 已設定';el.className='api-dot set';}
+  else{el.textContent='🔑 設定 API';el.className='api-dot unset';}
 }
 
-// Card rendering
+// ---- CARDS ----
 function isRed(s){return s==='♥'||s==='♦'}
-
 function renderSlot(slot,val){
-  if(slot==='h1')renderHoleCard(document.getElementById('card1-btn'),val);
-  else if(slot==='h2')renderHoleCard(document.getElementById('card2-btn'),val);
-  else renderCommCard(document.getElementById('cc'+slot[1]),val);
+  if(slot==='h1')renderHole(document.getElementById('card1-btn'),val);
+  else if(slot==='h2')renderHole(document.getElementById('card2-btn'),val);
+  else renderComm(document.getElementById('cc'+slot[1]),val);
 }
-
-function renderHoleCard(btn,val){
+function renderHole(btn,val){
   if(!val){btn.className='card-btn';btn.innerHTML='<span class="plus">+</span>';return;}
   const r=val.slice(0,-1),s=val.slice(-1),c=isRed(s)?'#cc3333':'#1a1a1a';
-  btn.className='card-btn filled';
-  btn.innerHTML=`<span class="rank" style="color:${c}">${r}</span><span class="suit" style="color:${c}">${s}</span>`;
+  btn.className='card-btn filled';btn.innerHTML=`<span class="rank" style="color:${c}">${r}</span><span class="suit" style="color:${c}">${s}</span>`;
 }
-
-function renderCommCard(btn,val){
+function renderComm(btn,val){
   if(!val){btn.className='comm-card';btn.innerHTML='<span class="cp">+</span>';return;}
   const r=val.slice(0,-1),s=val.slice(-1),c=isRed(s)?'#cc3333':'#1a1a1a';
-  btn.className='comm-card filled';
-  btn.innerHTML=`<span class="cr" style="color:${c}">${r}</span><span class="cs" style="color:${c}">${s}</span>`;
+  btn.className='comm-card filled';btn.innerHTML=`<span class="cr" style="color:${c}">${r}</span><span class="cs" style="color:${c}">${s}</span>`;
 }
-
 function updateSaveBtn(){
   const btn=document.getElementById('save-btn');
   if(state.h1&&state.h2){btn.className='save-btn ready';btn.textContent='儲存手牌';}
   else{btn.className='save-btn disabled';btn.textContent='選牌後儲存';}
 }
-
 function toggle(btn,group){
   const gMap={pos:'pos-group',act:'act-group',res:'res-group'};
   if(state[group]===btn.dataset.val){state[group]='';btn.classList.remove('on');}
   else{document.getElementById(gMap[group]).querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('on'));state[group]=btn.dataset.val;btn.classList.add('on');}
 }
 
-// Picker
+// ---- PICKER ----
 function openPicker(slot){
   pickerSlot=slot;
-  const labels={h1:'第1張手牌',h2:'第2張手牌',c1:'翻牌1',c2:'翻牌2',c3:'翻牌3',c4:'轉牌',c5:'河牌'};
-  document.getElementById('picker-title').textContent=labels[slot]||'選牌';
+  const lbl={h1:'第1張手牌',h2:'第2張手牌',c1:'翻牌1',c2:'翻牌2',c3:'翻牌3',c4:'轉牌',c5:'河牌'};
+  document.getElementById('picker-title').textContent=lbl[slot]||'選牌';
   buildPicker();
   document.getElementById('picker-overlay').classList.remove('hidden');
 }
 function closePicker(){document.getElementById('picker-overlay').classList.add('hidden');}
-function clearCard(){
-  state[pickerSlot]=null;renderSlot(pickerSlot,null);updateSaveBtn();closePicker();
-}
+function clearCard(){state[pickerSlot]=null;renderSlot(pickerSlot,null);updateSaveBtn();closePicker();}
 function buildPicker(){
   const cur=state[pickerSlot];
   const used=Object.values(state).filter(v=>v&&v!==cur);
@@ -433,27 +415,27 @@ function buildPicker(){
   document.getElementById('picker-clear').style.display=cur?'block':'none';
 }
 
+// ---- SAVE ----
 function saveHand(){
   if(!state.h1||!state.h2)return;
   const comm=[state.c1,state.c2,state.c3,state.c4,state.c5].filter(Boolean);
-  hands.unshift({id:Date.now(),card1:state.h1,card2:state.h2,
-    community:comm,pos:state.pos,act:state.act,res:state.res,
+  hands.unshift({id:Date.now(),card1:state.h1,card2:state.h2,community:comm,
+    pos:state.pos,act:state.act,res:state.res,
     pot:document.getElementById('pot-input').value,
     note:document.getElementById('note-input').value,
     time:new Date().toLocaleString('zh-TW')});
   save();
-  // Reset
   Object.keys(state).forEach(k=>state[k]=typeof state[k]==='string'?'':null);
   ['h1','h2'].forEach(s=>renderSlot(s,null));
   ['c1','c2','c3','c4','c5'].forEach(s=>renderSlot(s,null));
   document.querySelectorAll('.tog-btn.on').forEach(b=>b.classList.remove('on'));
-  document.getElementById('pot-input').value='';document.getElementById('note-input').value='';
+  document.getElementById('pot-input').value='';
+  document.getElementById('note-input').value='';
   document.getElementById('ai-status').className='ai-status';
   updateSaveBtn();
   const btn=document.getElementById('save-btn');btn.className='save-btn done';btn.textContent='✓ 已儲存！';
   setTimeout(()=>updateSaveBtn(),1500);
 }
-
 function save(){
   try{localStorage.setItem('pokerHands',JSON.stringify(hands));}catch{}
   updateStats();if(currentTab==='history')renderHistory();
@@ -467,7 +449,6 @@ function updateStats(){
   document.getElementById('s-rate').textContent=p?Math.round(w/p*100)+'%':'—';
   document.getElementById('hist-tab').textContent='📖 歷史記錄'+(t?` (${t})`:'');
 }
-
 function switchTab(tab){
   currentTab=tab;
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='record'?0:1)));
@@ -475,7 +456,6 @@ function switchTab(tab){
   document.getElementById('panel-history').classList.toggle('hidden',tab!=='history');
   if(tab==='history')renderHistory();
 }
-
 function renderHistory(){
   const el=document.getElementById('history-list');
   if(!hands.length){el.innerHTML='<div class="empty"><div class="icon">🃏</div><p>還沒有記錄的手牌</p></div>';return;}
@@ -483,12 +463,12 @@ function renderHistory(){
   const bc={Win:'#4caf50',Loss:'#e05252','Break-even':'#c8b97a'};
   el.innerHTML='<div class="hist-top"><button class="clear-all" onclick="clearAll()">清除全部</button></div>'+
     hands.map(h=>{
-      const mc=(v,sm)=>v?`<div class="mini-card${sm?' sm':''}" ><span class="r" style="color:${isRed(v.slice(-1))?'#cc3333':'#1a1a1a'}">${v.slice(0,-1)}</span><span class="s" style="color:${isRed(v.slice(-1))?'#cc3333':'#1a1a1a'}">${v.slice(-1)}</span></div>`:'';
+      const mc=(v,sm)=>v?`<div class="mini-card${sm?' sm':''}"><span class="r" style="color:${isRed(v.slice(-1))?'#cc3333':'#1a1a1a'}">${v.slice(0,-1)}</span><span class="s" style="color:${isRed(v.slice(-1))?'#cc3333':'#1a1a1a'}">${v.slice(-1)}</span></div>`:'';
       const comm=h.community&&h.community.length?`<div class="comm-cards-row">${h.community.map(c=>mc(c,true)).join('')}</div>`:'';
       const tags=[h.pos?`<span class="tag pos">${h.pos}</span>`:'',h.act?`<span class="tag act">${h.act}</span>`:'',h.res?`<span class="tag ${rc[h.res]||''}">${h.res}</span>`:'',h.pot?`<span class="tag pot">🍀${h.pot}BB</span>`:''].filter(Boolean).join('');
       return `<div class="hand-item" style="border-left:3px solid ${bc[h.res]||'#333'}">
         <div style="display:flex;gap:4px;flex-shrink:0">${mc(h.card1,false)}${mc(h.card2,false)}</div>
-        <div class="hand-meta"><div class="tags">${tags}</div>${comm}${h.note?`<div class="hand-note">${h.note}</div>`:''}<div class="hand-time">${h.time}</div></div>
+        <div class="hand-meta"><div class="tags">${tags||'<span style="font-size:10px;color:#444;font-family:sans-serif">無標記</span>'}</div>${comm}${h.note?`<div class="hand-note">${h.note}</div>`:''}<div class="hand-time">${h.time}</div></div>
         <button class="del-btn" onclick="deleteHand(${h.id})">×</button>
       </div>`;
     }).join('');
@@ -496,7 +476,7 @@ function renderHistory(){
 function deleteHand(id){hands=hands.filter(h=>h.id!==id);save();renderHistory();}
 function clearAll(){if(confirm('確定清除所有手牌記錄？')){hands=[];save();renderHistory();}}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-updateStats();updateSaveBtn();updateApiStatus();
+updateStats();updateSaveBtn();updateApiDot();
 </script>
 </body>
 </html>
