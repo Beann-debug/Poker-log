@@ -11,54 +11,62 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.svg">
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+*{box-sizing:border-box;-webkit-tap-highlight-color:rgba(0,0,0,0);margin:0;padding:0;-webkit-touch-callout:none}
 :root{--gold:#c8b97a;--bg:#07120a;--card-bg:#f5f0e8;--red:#e05252;--green:#4caf50;--text:#e8e0d0;--muted:#667}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Georgia',serif;overscroll-behavior:none}
 #app{height:100%;display:flex;flex-direction:column}
-header{background:linear-gradient(180deg,#0d2a18,#091509);border-bottom:1px solid rgba(200,185,122,.2);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0}
+header{background:linear-gradient(180deg,#0d2a18,#091509);border-bottom:1px solid rgba(200,185,122,.2);padding-top:env(safe-area-inset-top,0);flex-shrink:0}
 .header-inner{padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-size:20px;letter-spacing:3px;color:var(--gold);font-variant:small-caps}
 .stats-bar{display:flex;justify-content:space-around;padding:8px 0 12px;border-top:1px solid rgba(200,185,122,.1)}
 .stat{text-align:center}.stat-val{font-size:18px;font-weight:bold;line-height:1}
 .stat-lbl{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;font-family:sans-serif}
 .tabs{display:flex;border-bottom:1px solid rgba(200,185,122,.15);flex-shrink:0;background:#091509}
-.tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-family:sans-serif;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab{flex:1;padding:11px 4px;text-align:center;font-size:12px;font-family:sans-serif;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom,0) + 14px)}
+.panel{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 30px}
 .panel.hidden{display:none}
 .sec-label{font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;font-family:sans-serif}
 .card-row{display:flex;justify-content:center;gap:18px;margin-bottom:20px;padding:16px 0}
-.card-btn{width:58px;height:82px;border-radius:9px;border:2px dashed rgba(200,185,122,.35);background:rgba(255,255,255,.04);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;transition:all .2s;-webkit-user-select:none}
+.card-btn{width:64px;height:88px;border-radius:10px;border:2px dashed rgba(200,185,122,.35);background:rgba(255,255,255,.04);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Georgia',serif;font-weight:bold;-webkit-user-select:none;user-select:none}
 .card-btn.filled{background:var(--card-bg);border:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.5)}
-.card-btn .rank{font-size:20px;line-height:1}.card-btn .suit{font-size:22px;line-height:1}.card-btn .plus{font-size:26px;color:rgba(200,185,122,.4)}
-.picker-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;display:flex;align-items:flex-end;justify-content:center}
-.picker-sheet{background:#111;border-radius:16px 16px 0 0;padding:16px 14px;width:100%;max-width:480px;padding-bottom:calc(env(safe-area-inset-bottom,0) + 16px)}
-.picker-title{font-size:13px;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:12px;font-family:sans-serif}
-.suit-row{display:flex;gap:4px;flex-wrap:nowrap;justify-content:center;margin-bottom:6px}
-.rank-btn{width:24px;height:24px;border-radius:4px;border:none;cursor:pointer;font-size:10px;font-weight:bold;font-family:'Georgia',serif;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0}
-.clear-btn{width:100%;padding:10px;background:rgba(224,82,82,.15);border:1px solid var(--red);border-radius:8px;color:var(--red);cursor:pointer;font-size:13px;margin-top:8px;font-family:sans-serif}
-.cancel-btn{width:100%;padding:10px;background:rgba(255,255,255,.05);border:1px solid #333;border-radius:8px;color:#888;cursor:pointer;font-size:13px;margin-top:6px;font-family:sans-serif}
-.btn-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.tog-btn{padding:7px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#666;cursor:pointer;font-size:12px;font-family:sans-serif;transition:all .15s;-webkit-user-select:none}
+.card-btn .rank{font-size:22px;line-height:1}.card-btn .suit{font-size:24px;line-height:1}
+.card-btn .plus{font-size:30px;color:rgba(200,185,122,.4)}
+
+/* Picker - fullscreen modal */
+.picker-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:100;display:flex;flex-direction:column;justify-content:flex-end}
+.picker-overlay.hidden{display:none}
+.picker-sheet{background:#141414;border-radius:18px 18px 0 0;display:flex;flex-direction:column;max-height:85vh}
+.picker-header{padding:16px 16px 10px;flex-shrink:0;text-align:center}
+.picker-title{font-size:14px;color:var(--gold);letter-spacing:2px;font-family:sans-serif}
+.picker-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px 8px}
+.suit-row{display:flex;gap:5px;justify-content:center;margin-bottom:7px}
+.rank-btn{min-width:26px;height:36px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:bold;font-family:'Georgia',serif;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:0 3px;-webkit-user-select:none;user-select:none}
+.picker-footer{flex-shrink:0;padding:8px 14px;padding-bottom:max(env(safe-area-inset-bottom,0px),16px)}
+.clear-btn{width:100%;padding:14px;background:rgba(224,82,82,.15);border:1px solid var(--red);border-radius:10px;color:var(--red);cursor:pointer;font-size:14px;margin-bottom:8px;font-family:sans-serif;-webkit-user-select:none}
+.cancel-btn{width:100%;padding:14px;background:rgba(255,255,255,.07);border:1px solid #333;border-radius:10px;color:#888;cursor:pointer;font-size:14px;font-family:sans-serif;-webkit-user-select:none}
+
+.btn-group{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.tog-btn{padding:9px 14px;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#666;cursor:pointer;font-size:13px;font-family:sans-serif;-webkit-user-select:none;user-select:none}
 .tog-btn.on{border-color:var(--gold);background:rgba(200,185,122,.15);color:var(--gold)}
 .tog-btn.win.on{border-color:var(--green);background:rgba(76,175,80,.15);color:var(--green)}
 .tog-btn.loss.on{border-color:var(--red);background:rgba(224,82,82,.15);color:var(--red)}
 .tog-btn.fold.on{border-color:#888;background:rgba(128,128,128,.15);color:#999}
-input,textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(200,185,122,.2);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;font-family:sans-serif;margin-bottom:14px;outline:none}
+input,textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(200,185,122,.2);border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;font-family:sans-serif;margin-bottom:14px;outline:none}
 input:focus,textarea:focus{border-color:rgba(200,185,122,.5)}
 textarea{resize:none;line-height:1.5}
-.save-btn{width:100%;padding:15px;border-radius:11px;border:none;font-size:15px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:sans-serif;transition:all .2s}
+.save-btn{width:100%;padding:16px;border-radius:12px;border:none;font-size:15px;font-weight:bold;letter-spacing:1px;cursor:pointer;font-family:sans-serif}
 .save-btn.ready{background:linear-gradient(135deg,#c8b97a,#a89458);color:#080e08}
 .save-btn.done{background:rgba(76,175,80,.3);color:var(--green);border:1px solid var(--green)}
-.save-btn.disabled{background:rgba(255,255,255,.05);color:#444;cursor:not-allowed}
-.hand-item{background:rgba(255,255,255,.04);border:1px solid rgba(200,185,122,.15);border-radius:10px;padding:11px 12px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
-.mini-card{width:34px;height:47px;background:var(--card-bg);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.5);flex-shrink:0}
-.mini-card .r{font-size:12px;line-height:1;font-family:'Georgia',serif;font-weight:bold}
-.mini-card .s{font-size:14px;line-height:1;font-family:'Georgia',serif}
+.save-btn.disabled{background:rgba(255,255,255,.05);color:#444}
+.hand-item{background:rgba(255,255,255,.04);border:1px solid rgba(200,185,122,.15);border-radius:10px;padding:12px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
+.mini-card{width:36px;height:50px;background:var(--card-bg);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.5);flex-shrink:0}
+.mini-card .r{font-size:13px;line-height:1;font-family:'Georgia',serif;font-weight:bold}
+.mini-card .s{font-size:15px;line-height:1;font-family:'Georgia',serif}
 .mini-card.empty{background:rgba(255,255,255,.04);border:1px dashed #333}
 .hand-meta{flex:1;min-width:0}
 .tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:3px}
-.tag{font-size:10px;padding:2px 8px;border-radius:20px;font-family:sans-serif}
+.tag{font-size:10px;padding:3px 8px;border-radius:20px;font-family:sans-serif}
 .tag.pos{background:rgba(200,185,122,.12);color:var(--gold);border:1px solid rgba(200,185,122,.25)}
 .tag.act{background:rgba(255,255,255,.06);color:#888}
 .tag.win{background:rgba(76,175,80,.15);color:var(--green)}
@@ -68,12 +76,12 @@ textarea{resize:none;line-height:1.5}
 .tag.pot{color:#666}
 .hand-note{font-size:11px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:sans-serif}
 .hand-time{font-size:10px;color:#444;font-family:sans-serif;margin-top:2px}
-.del-btn{background:none;border:none;color:#444;cursor:pointer;font-size:18px;padding:4px 6px;border-radius:4px;flex-shrink:0;line-height:1}
+.del-btn{background:none;border:none;color:#444;cursor:pointer;font-size:22px;padding:4px 8px;flex-shrink:0;line-height:1}
 .empty{text-align:center;padding:50px 20px;color:#444}
 .empty .icon{font-size:48px;margin-bottom:12px}
 .empty p{font-size:13px;font-family:sans-serif;line-height:1.6}
 .hist-top{display:flex;justify-content:flex-end;margin-bottom:10px}
-.clear-all{font-size:11px;color:var(--red);background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.3);border-radius:6px;padding:5px 10px;cursor:pointer;font-family:sans-serif}
+.clear-all{font-size:11px;color:var(--red);background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.3);border-radius:6px;padding:6px 12px;cursor:pointer;font-family:sans-serif}
 </style>
 </head>
 <body>
@@ -136,12 +144,17 @@ textarea{resize:none;line-height:1.5}
   </div>
 </div>
 
-<div class="picker-overlay hidden" id="picker-overlay" onclick="closePicker(event)">
-  <div class="picker-sheet" onclick="event.stopPropagation()">
-    <div class="picker-title" id="picker-title">選擇手牌</div>
-    <div id="picker-suits"></div>
-    <button class="clear-btn" id="picker-clear" onclick="clearCard()">清除選牌</button>
-    <button class="cancel-btn" onclick="closePicker()">取消</button>
+<!-- Picker Modal -->
+<div class="picker-overlay hidden" id="picker-overlay">
+  <div class="picker-sheet">
+    <div class="picker-header">
+      <div class="picker-title" id="picker-title">選擇手牌</div>
+    </div>
+    <div class="picker-scroll" id="picker-suits"></div>
+    <div class="picker-footer">
+      <button class="clear-btn" id="picker-clear" onclick="clearCard()">清除選牌</button>
+      <button class="cancel-btn" onclick="closePicker()">取消</button>
+    </div>
   </div>
 </div>
 
@@ -150,6 +163,11 @@ const SUITS=['♠','♥','♦','♣'],RANKS=['A','K','Q','J','T','9','8','7','6'
 let state={card1:null,card2:null,pos:'',act:'',res:''};
 let hands=[],pickerSlot=0,currentTab='record';
 try{hands=JSON.parse(localStorage.getItem('pokerHands')||'[]');}catch{}
+
+// Close picker when tapping overlay background
+document.getElementById('picker-overlay').addEventListener('click', function(e){
+  if(e.target===this) closePicker();
+});
 
 function save(){
   try{localStorage.setItem('pokerHands',JSON.stringify(hands));}catch{}
@@ -184,28 +202,36 @@ function toggle(btn,group){
 function openPicker(slot){
   pickerSlot=slot;
   document.getElementById('picker-title').textContent=`選擇第 ${slot} 張牌`;
-  document.getElementById('picker-overlay').classList.remove('hidden');
   buildPicker();
+  document.getElementById('picker-overlay').classList.remove('hidden');
 }
-function closePicker(e){
-  if(!e||e.target===document.getElementById('picker-overlay'))document.getElementById('picker-overlay').classList.add('hidden');
+function closePicker(){
+  document.getElementById('picker-overlay').classList.add('hidden');
 }
 function clearCard(){
-  state['card'+pickerSlot]=null;renderCard(document.getElementById('card'+pickerSlot+'-btn'),null);
-  updateSaveBtn();document.getElementById('picker-overlay').classList.add('hidden');
+  state['card'+pickerSlot]=null;
+  renderCard(document.getElementById('card'+pickerSlot+'-btn'),null);
+  updateSaveBtn();
+  closePicker();
 }
 function buildPicker(){
   const cur=state['card'+pickerSlot],other=state['card'+(pickerSlot===1?2:1)];
-  const c=document.getElementById('picker-suits');c.innerHTML='';
+  const c=document.getElementById('picker-suits');
+  c.innerHTML='';
   SUITS.forEach(s=>{
     const row=document.createElement('div');row.className='suit-row';
     RANKS.forEach(r=>{
-      const val=r+s,isO=val===other,isSel=val===cur,col=isRed(s)?'#cc4444':'#ddd';
+      const val=r+s,isO=val===other,isSel=val===cur,col=isRed(s)?'#dd4444':'#ddd';
       const btn=document.createElement('button');btn.className='rank-btn';
-      btn.style.cssText=`background:${isSel?'#c8b97a':isO?'rgba(255,255,255,.03)':'rgba(255,255,255,.1)'};color:${isSel?'#000':col};opacity:${isO?.2:1}`;
+      btn.style.cssText=`background:${isSel?'#c8b97a':isO?'rgba(255,255,255,.03)':'rgba(255,255,255,.11)'};color:${isSel?'#000':col};opacity:${isO?.2:1};min-width:26px`;
       btn.disabled=isO;
-      btn.innerHTML=`<span style="font-size:11px;line-height:1">${r}</span><span style="font-size:9px;line-height:1">${s}</span>`;
-      btn.onclick=()=>{state['card'+pickerSlot]=val;renderCard(document.getElementById('card'+pickerSlot+'-btn'),val);updateSaveBtn();document.getElementById('picker-overlay').classList.add('hidden');};
+      btn.innerHTML=`<span style="font-size:12px;line-height:1">${r}</span><span style="font-size:10px;line-height:1">${s}</span>`;
+      btn.addEventListener('click',()=>{
+        state['card'+pickerSlot]=val;
+        renderCard(document.getElementById('card'+pickerSlot+'-btn'),val);
+        updateSaveBtn();
+        closePicker();
+      });
       row.appendChild(btn);
     });
     c.appendChild(row);
