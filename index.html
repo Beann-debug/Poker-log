@@ -154,9 +154,17 @@ textarea{resize:none;line-height:1.5}
       <button class="cam-btn" id="cam-all-btn" onclick="triggerCamera('all')">
         <span class="ci">🃏</span><span>拍全部牌面</span>
       </button>
+      <button class="cam-btn" onclick="triggerUpload('hole')">
+        <span class="ci">🖼️</span><span>上傳圖片</span>
+      </button>
+      <button class="cam-btn" onclick="triggerUpload('all')">
+        <span class="ci">📂</span><span>上傳全部牌面</span>
+      </button>
     </div>
     <div class="ai-status" id="ai-status"></div>
     <input type="file" id="cam-input" accept="image/*" capture="environment">
+    <input type="file" id="upload-input" accept="image/*">
+    <input type="file" id="upload-input" accept="image/*,application/pdf">
 
     <div class="sec-label">手牌（點擊手動選牌）</div>
     <div class="card-row">
@@ -258,6 +266,14 @@ try{hands=JSON.parse(localStorage.getItem('pokerHands')||'[]');}catch{}
 document.getElementById('picker-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('picker-overlay'))closePicker();});
 document.getElementById('api-modal').addEventListener('click',e=>{if(e.target===document.getElementById('api-modal'))hideApiModal();});
 document.getElementById('cam-input').addEventListener('change',function(){if(this.files&&this.files[0])processImage(this.files[0]);});
+document.getElementById('upload-input').addEventListener('change',function(){if(this.files&&this.files[0])processImage(this.files[0]);});
+
+function triggerUpload(mode){
+  if(!localStorage.getItem('geminiKey')){showApiModal();return;}
+  cameraMode=mode;
+  document.getElementById('upload-input').value='';
+  document.getElementById('upload-input').click();
+}
 
 // ---- CAMERA / AI ----
 function triggerCamera(mode){
@@ -282,7 +298,7 @@ async function processImage(file){
       :'辨識圖片中所有撲克牌。手牌放h1,h2；公共牌放c1~c5(沒有就省略)。只回傳純JSON，格式範例：{"h1":"As","h2":"Kh","c1":"Qd","c2":"Jc","c3":"9s"}。花色：s=黑桃,h=紅心,d=方塊,c=梅花。點數：A K Q J T 9~2。只輸出JSON。';
 
     const key=localStorage.getItem('geminiKey');
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{parts:[
