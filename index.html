@@ -294,19 +294,8 @@ async function processImage(file){
     const b64=await toBase64(file);
     const mimeType=file.type||'image/jpeg';
     const prompt=cameraMode==='hole'
-      ?'請依序辨識圖片中的撲克手牌(hole cards)：
-步驟1：讀取每張牌左上角印刷的數字或字母。
-步驟2：如果步驟1讀到的數字看起來像6或9，請數牌面中央的花色符號數量——6個符號代表6，9個符號代表9。
-步驟3：輸出純JSON，格式：{"h1":"As","h2":"Kh"}。
-花色：s=黑桃,h=紅心,d=方塊,c=梅花。點數：A K Q J T 9 8 7 6 5 4 3 2。
-最後一行必須只有純JSON。'
-      :'請依序辨識圖片中所有撲克牌：
-步驟1：讀取每張牌左上角印刷的數字或字母。
-步驟2：如果步驟1讀到的數字看起來像6或9，請數牌面中央的花色符號數量——6個符號代表6，9個符號代表9。
-步驟3：輸出純JSON。手牌放h1,h2；公共牌放c1~c5(沒有就省略)。
-格式範例：{"h1":"As","h2":"Kh","c1":"Qd","c2":"Jc","c3":"9s"}
-花色：s=黑桃,h=紅心,d=方塊,c=梅花。點數：A K Q J T 9 8 7 6 5 4 3 2。
-最後一行必須只有純JSON。';
+      ?'辨識圖片中的撲克手牌(hole cards)。規則：1)只看每張牌左上角的數字，忽略右下角（右下角倒置易誤判）。2)若左上角數字是6或9難以判斷，則數牌面中央花色符號總數：6個=6，9個=9。3)花色：s黑桃h紅心d方塊c梅花。只輸出純JSON：{"h1":"As","h2":"Kh"}'
+      :'辨識圖片中所有撲克牌。規則：1)只看每張牌左上角的數字，忽略右下角（右下角倒置易誤判）。2)若左上角數字是6或9難以判斷，則數牌面中央花色符號總數：6個=6，9個=9。3)花色：s黑桃h紅心d方塊c梅花。手牌h1,h2；公共牌c1~c5(沒有省略)。只輸出純JSON範例：{"h1":"As","h2":"Kh","c1":"Qd"}';
 
     const key=localStorage.getItem('geminiKey');
     const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`,{
