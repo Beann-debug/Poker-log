@@ -318,6 +318,31 @@ async function processImage(file){
     if(!jsonMatch)throw new Error('無法從回應中找到牌面資料，請重拍');
     const json=JSON.parse(jsonMatch[0]);
 
+    // Check if any 6 or 9 detected - if so, do second verification pass
+    const ambiguous=Object.entries(json).filter(([slot,val])=>val&&(val.startsWith('6')||val.startsWith('9')));
+    if(ambiguous.length>0){
+      status.textContent=`🔍 偵測到 ${ambiguous.map(([,v])=>v).join(',')}，二次驗證中…`;
+      const verifyPrompt=`圖片中有幾張撲克牌點數可能是6或9，請仔細數每張牌【牌面正中央】的花色符號總數來判斷（不要看角落數字）。${ambiguous.map(([slot])=>`${slot}這張牌`).join('和')}，各自中央有幾個花色符號？6個=6，9個=9。只輸出純JSON：${JSON.stringify(Object.fromEntries(ambiguous))}這個格式，把正確點數填入。`;
+      const res2=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:mimeType,data:b64}},{text:verifyPrompt}]}]})
+      });
+      if(res2.ok){
+        const data2=await res2.json();
+        const text2=data2.candidates?.[0]?.content?.parts?.[0]?.text||'';
+        const match2=text2.match(/\{[^{}]+\}(?=[^{}]*$)/);
+        if(match2){
+          try{
+            const json2=JSON.parse(match2[0]);
+            Object.entries(json2).forEach(([slot,val])=>{
+              const converted=convertCard(val);
+              if(converted)json[slot]=val;
+            });
+          }catch(e){}
+        }
+      }
+    }
+
     let filled=[];
     Object.entries(json).forEach(([slot,val])=>{
       const converted=convertCard(val);
