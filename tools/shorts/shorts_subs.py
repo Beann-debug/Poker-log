@@ -79,11 +79,11 @@ def build_cues(words, max_chars, max_gap):
             cur.clear()
 
     for w in words:
-        if cur and (w["start"] - cur[-1]["end"] > max_gap):
+        length = len("".join(x["text"] for x in cur))
+        if cur and (w["start"] - cur[-1]["end"] > max_gap or length + len(w["text"]) > max_chars):
             flush()
         cur.append(w)
-        length = len("".join(x["text"] for x in cur))
-        if length >= max_chars or w["text"][-1] in PUNCT:
+        if w["text"][-1] in PUNCT:
             flush()
     flush()
     return cues
@@ -116,11 +116,17 @@ def remap(t, intervals):
 
 
 def fmt_ts(t, sep):
-    h, rem = divmod(max(t, 0.0), 3600)
-    m, s = divmod(rem, 60)
-    if sep == ",":  # SRT
-        return f"{int(h):02d}:{int(m):02d}:{int(s):02d},{int(round((s % 1) * 1000)) % 1000:03d}"
-    return f"{int(h)}:{int(m):02d}:{s:05.2f}"  # ASS
+    if sep == ",":  # SRT：毫秒
+        ms = int(round(max(t, 0.0) * 1000))
+        h, ms = divmod(ms, 3_600_000)
+        m, ms = divmod(ms, 60_000)
+        s, ms = divmod(ms, 1000)
+        return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+    cs = int(round(max(t, 0.0) * 100))  # ASS：百分之一秒
+    h, cs = divmod(cs, 360_000)
+    m, cs = divmod(cs, 6000)
+    s, cs = divmod(cs, 100)
+    return f"{h}:{m:02d}:{s:02d}.{cs:02d}"
 
 
 def write_srt(cues, path):
@@ -200,10 +206,23 @@ def render(clip, out, intervals, ass_path, overlay, fonts_dir):
     subprocess.run(cmd, check=True)
 
 
-def main():
-    p = argparse.ArgumentParser(description="Canva 片段 → 9:16 繁中字幕 Shorts")
-    p.add_argument("clip", type=Path)
-    p.add_argument("--out-dir", type=Path, default=None, help="輸出資料夾（預設與片段同層的 out/）")
+def transcribe_traditional(clip, a):
+    """辨識並轉成繁中台灣用語，套用詞表。"""
+    print(f"辨識中（模型 {a.model}）…")
+    glossary = load_glossary(a.glossary)
+    try:
+        words = transcribe(clip, a.model, a.language, a.prompt)
+    except ImportError:
+        sys.exit("缺少套件，請先執行：pip install -r requirements.txt")
+    except Exception as e:  # 多半是第一次下載模型時連不上 Hugging Face
+        sys.exit(f"語音辨識失敗：{e}\n第一次執行需要連網下載模型，請確認網路可連到 huggingface.co。")
+    for w in words:
+        w["text"] = to_traditional(w["text"], glossary)
+    return words
+
+
+def add_common_args(p):
+    """辨識與輸出參數（highlights.py 也共用）。"""
     p.add_argument("--model", default="small", help="Whisper 模型：small / medium / large-v3（越大越準越慢）")
     p.add_argument("--language", default="zh")
     p.add_argument("--prompt", default="以下是繁體中文的內容。", help="給辨識模型的提示，可放常出現的專有名詞")
@@ -218,35 +237,10 @@ def main():
     p.add_argument("--font-size", type=int, default=84)
     p.add_argument("--margin-v", type=int, default=520, help="字幕離底部的距離（避開 Shorts 介面）")
     p.add_argument("--overlay", type=Path, help="Canva 匯出的 1080x1920 透明 PNG 品牌框")
-    a = p.parse_args()
 
-    if not shutil.which("ffmpeg"):
-        sys.exit("找不到 ffmpeg，請先安裝。")
-    clip = a.clip.resolve()
-    out_dir = (a.out_dir or clip.parent / "out").resolve()
-    out_dir.mkdir(parents=True, exist_ok=True)
-    subs_json = out_dir / f"{clip.stem}.subs.json"
-    duration = probe_duration(clip)
 
-    if subs_json.exists() and not a.retranscribe:
-        data = json.loads(subs_json.read_text(encoding="utf-8"))
-        print(f"沿用 {subs_json.name}（要重新辨識請加 --retranscribe）")
-    else:
-        print(f"辨識中（模型 {a.model}）…")
-        glossary = load_glossary(a.glossary)
-        try:
-            words = transcribe(clip, a.model, a.language, a.prompt)
-        except ImportError:
-            sys.exit("缺少套件，請先執行：pip install -r requirements.txt")
-        except Exception as e:  # 多半是第一次下載模型時連不上 Hugging Face
-            sys.exit(f"語音辨識失敗：{e}\n第一次執行需要連網下載模型，請確認網路可連到 huggingface.co。")
-        for w in words:
-            w["text"] = to_traditional(w["text"], glossary)
-        cues = build_cues(words, a.max_chars, max_gap=0.45)
-        data = {"words": words, "cues": cues}
-        subs_json.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-        print(f"已寫出 {subs_json.name}：可直接修改 cues 的 text，再跑一次就會套用")
-
+def make_short(clip, out_dir, data, duration, a):
+    """依 subs.json 的內容剪停頓、轉 9:16、燒字幕，輸出 <片名>_shorts.mp4。"""
     intervals = [(0.0, duration)] if a.no_cut else keep_intervals(data["words"], duration, a.pad, a.min_gap)
     cues = [
         {"start": remap(c["start"], intervals), "end": remap(c["end"], intervals), "text": c["text"]}
@@ -265,7 +259,36 @@ def main():
     print(f"完成：{out_mp4}")
     print(f"原長 {duration:.1f}s → 剪後 {kept:.1f}s，字幕 {len(cues)} 句")
     if kept > 60:
-        print("提醒：超過 60 秒，請在 Canva 重新挑短一點的片段。")
+        print("提醒：超過 60 秒，請挑短一點的片段。")
+    return out_mp4
+
+
+def main():
+    p = argparse.ArgumentParser(description="Canva 片段 → 9:16 繁中字幕 Shorts")
+    p.add_argument("clip", type=Path)
+    p.add_argument("--out-dir", type=Path, default=None, help="輸出資料夾（預設與片段同層的 out/）")
+    add_common_args(p)
+    a = p.parse_args()
+
+    if not shutil.which("ffmpeg"):
+        sys.exit("找不到 ffmpeg，請先安裝。")
+    clip = a.clip.resolve()
+    out_dir = (a.out_dir or clip.parent / "out").resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    subs_json = out_dir / f"{clip.stem}.subs.json"
+    duration = probe_duration(clip)
+
+    if subs_json.exists() and not a.retranscribe:
+        data = json.loads(subs_json.read_text(encoding="utf-8"))
+        print(f"沿用 {subs_json.name}（要重新辨識請加 --retranscribe）")
+    else:
+        words = transcribe_traditional(clip, a)
+        cues = build_cues(words, a.max_chars, max_gap=0.45)
+        data = {"words": words, "cues": cues}
+        subs_json.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"已寫出 {subs_json.name}：可直接修改 cues 的 text，再跑一次就會套用")
+
+    make_short(clip, out_dir, data, duration, a)
 
 
 if __name__ == "__main__":

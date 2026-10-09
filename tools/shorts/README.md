@@ -1,4 +1,51 @@
-# 長片 → Shorts 混合流程（Canva ＋ 字幕腳本）
+# 長片 → Shorts 自動化工具
+
+有兩種用法：
+
+- **全自動（建議）**：`highlights.py` 由 Gemini 從長片挑精華，一次產出多支帶字幕的 Shorts。
+- **混合**：先在 Canva Highlights 手動挑片段，再用 `shorts_subs.py` 上字幕。
+
+## 全自動：Gemini 挑精華
+
+```
+長片
+ → 整支語音辨識（只跑一次，快取在 out/片名.transcript.json）
+ → Gemini 讀帶時間戳的逐字稿，挑出 N 段 20–55 秒、開頭有鉤子、能獨立看懂的片段
+   → out/片名.highlights.json（可改起訖時間、刪掉不要的段落）
+ → 每段：剪停頓、轉 9:16、疊品牌框、燒繁中字幕 → out/片名_clips/片名_01_shorts.mp4 …
+ → out/片名.titles.md：每支的標題、開場鉤子、挑選理由、爆紅分數，上傳時直接複製
+```
+
+```bash
+export GEMINI_API_KEY=你的key          # Windows PowerShell：$env:GEMINI_API_KEY="你的key"
+python3 highlights.py long.mp4 --count 3 --overlay frame.png
+
+# 先只看 Gemini 挑了哪些段落，滿意再產影片
+python3 highlights.py long.mp4 --select-only
+python3 highlights.py long.mp4                  # 沿用剛才的選段，開始產影片
+
+# 告訴 Gemini 你的觀眾和重點，挑得更準
+python3 highlights.py long.mp4 --topic "觀眾是台灣分租房東，重點放在省錢和避免糾紛"
+
+# 不滿意就重挑
+python3 highlights.py long.mp4 --repick
+```
+
+| 參數 | 預設 | 說明 |
+|---|---|---|
+| `--count` | 3 | 要挑幾段 |
+| `--min-len` / `--max-len` | 20 / 55 | 每段長度（秒）；剪掉停頓後通常會再短一些 |
+| `--gemini-model` | gemini-2.5-flash | 可改成其他 Gemini 模型 |
+| `--topic` | 無 | 補充給 Gemini 的方向 |
+| `--select-only` | 關 | 只挑選段落，不產出影片 |
+| `--repick` | 關 | 讓 Gemini 重新挑選 |
+
+其餘字幕參數（`--model`、`--overlay`、`--font` 等）跟 `shorts_subs.py` 共用。
+
+Gemini 挑出的時間會自動對齊到句子的開頭和結尾。長度不合、互相重疊的段落會被剔除。
+Gemini 只會收到**逐字稿文字**，不會收到影片檔，所以成本低、速度快。
+
+## 混合：Canva 挑片段＋腳本上字幕
 
 Canva 負責**挑片段**和**品牌視覺**，`shorts_subs.py` 負責 Canva 做不到的部分：**繁中字幕、剪停頓、轉 9:16**。
 
@@ -13,6 +60,8 @@ Canva 負責**挑片段**和**品牌視覺**，`shorts_subs.py` 負責 Canva 做
 ```
 
 ## 安裝（第一次）
+
+Gemini 的 API key 可以在 Google AI Studio 申請。
 
 1. 安裝 ffmpeg
    - macOS：`brew install ffmpeg`
